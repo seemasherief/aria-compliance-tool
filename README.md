@@ -1,4 +1,4 @@
-# ARIA — AI Risk & Compliance Intelligence
+# ARIA - AI Risk & Compliance Intelligence
 ### Built by Seema Sherief
 
 A compliance risk mitigation tool for e-commerce Customer Service AI systems.
