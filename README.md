@@ -53,16 +53,16 @@ Most CS teams lack a dedicated compliance monitoring layer for AI systems. ARIA 
 
 ## The 4 CS AI Systems Being Monitored
 
-**1. CS Chatbot v2.4 - 32% Compliant - 🔴 CRITICAL**
+**1. CS Chatbot v2.4 - 32% Compliant - CRITICAL**
 The customer-facing conversational AI. Handles order enquiries, returns, refunds and complaints directly with customers. The most visible and most heavily regulated system because it interacts with customers at scale. Currently the worst performer with 8 open compliance issues.
 
-**2. Auto-Routing Engine - 61% Compliant — 🟠 HIGH**
+**2. Auto-Routing Engine - 61% Compliant — HIGH**
 An invisible system customers never see. Reads incoming messages and routes them to the right team. Such as, returns, billing, complaints or the chatbot. Makes routing decisions thousands of times per day. A 23% language bias issue lives here - it routes non-English speakers to the AI bot more often than English speakers, a potential discriminatory outcome under EU AI Act Art. 10.
 
-**3. Sentiment Classifier - 79% Compliant - 🟡 MEDIUM**
+**3. Sentiment Classifier - 79% Compliant - MEDIUM**
 Reads every customer message in real time and scores the emotional tone. Frustrated, neutral, satisfied, angry. Uses that score to flag high-risk conversations for priority human handling. Two open issues around profiling of customer emotional states under GDPR Art. 22.
 
-**4. Return Fraud Detector - 91% Compliant - 🟢 LOW**
+**4. Return Fraud Detector - 91% Compliant - LOW**
 A machine learning model that analyses return requests and assigns a fraud probability score. The healthiest system at 91% compliant. The 1 remaining issue relates to documenting decision criteria so wrongly-flagged customers can challenge the decision, which is required under GDPR Art. 22 and EU AI Act Art. 14.
 
 ---
@@ -116,10 +116,10 @@ The 14 violations are tiered by urgency:
 
 | Severity | Count | Timeframe to Fix |
 |---|---|---|
-| 🔴 Critical | 3 | Within 30 days |
-| 🟠 High | 6 | Within 90 days |
-| 🟡 Medium | 4 | Within 180 days |
-| 🟢 Low | 1 | Best effort |
+| Critical | 3 | Within 30 days |
+| High | 6 | Within 90 days |
+| Medium | 4 | Within 180 days |
+| Low | 1 | Best effort |
 | **Total** | **14** | |
 
 **Interactions Scanned - 24,891 · 98.2% Coverage**
@@ -128,16 +128,16 @@ The 14 violations are tiered by urgency:
 
 #### The 4 Live Compliance Alerts
 
-**🔴 Alert 1 - AI agent not disclosing automated nature to customers**
+**Alert 1 - AI agent not disclosing automated nature to customers**
 The CS chatbot is having conversations without ever saying it is an AI. 847 customers today were misled into thinking they were talking to a human. EU AI Act Article 52(1) makes this illegal. Fines up to €15 million. The CS Bot v2.4 version number matters, when v2.5 ships with the fix, the violation stops and that improvement is traceable.
 
-**🔴 Alert 2 - PII data retained beyond policy limit in chat logs**
+**Alert 2 - PII data retained beyond policy limit in chat logs**
 Customer personal data - names, email addresses, order details - is being stored longer than the company's own 90-day retention policy. 12,400 records are currently at risk. GDPR Article 5(e) requires storage limitation. CCPA §1798.100 gives customers the right to know their data is not held indefinitely.
 
-**🟠 Alert 3 - Escalation rate disparity across customer segments**
+**Alert 3 - Escalation rate disparity across customer segments**
 The Auto-Routing Engine sends English-speaking customers to human agents 23% more often than non-English speakers. Non-English customers are kept with the AI bot longer even when their issues are equally complex. EU AI Act Article 10 requires AI systems not to produce discriminatory outcomes. A 23% measurable gap based on language is a potential bias violation.
 
-**🟠 Alert 4 - Missing human override documentation for AI decisions**
+**Alert 4 - Missing human override documentation for AI decisions**
 Three types of AI decisions have no written procedure for when and how a human agent should step in. EU AI Act Article 14 requires oversight mechanisms to exist AND be documented. Having an escalation button is not enough. There must be a written procedure that agents actively follow.
 
 ---
