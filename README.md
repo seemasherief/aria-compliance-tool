@@ -287,7 +287,7 @@ Applies to California residents regardless of company location if thresholds are
 |---|---|
 | AI Transparency Notice v2 | DRAFT |
 | DPIA — CS Chatbot v2.4 | APPROVED |
-| Human Oversight Manual v1 | MISSING — critical gap |
+| Human Oversight Manual v1 | MISSING - critical gap |
 | Bias Audit Report Q1-2025 | IN REVIEW |
 | Incident Response Playbook v3 | APPROVED |
 
