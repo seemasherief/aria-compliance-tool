@@ -56,7 +56,7 @@ Most CS teams lack a dedicated compliance monitoring layer for AI systems. ARIA 
 **1. CS Chatbot v2.4 - 32% Compliant - CRITICAL**
 The customer-facing conversational AI. Handles order enquiries, returns, refunds and complaints directly with customers. The most visible and most heavily regulated system because it interacts with customers at scale. Currently the worst performer with 8 open compliance issues.
 
-**2. Auto-Routing Engine - 61% Compliant — HIGH**
+**2. Auto-Routing Engine - 61% Compliant - HIGH**
 An invisible system customers never see. Reads incoming messages and routes them to the right team. Such as, returns, billing, complaints or the chatbot. Makes routing decisions thousands of times per day. A 23% language bias issue lives here - it routes non-English speakers to the AI bot more often than English speakers, a potential discriminatory outcome under EU AI Act Art. 10.
 
 **3. Sentiment Classifier - 79% Compliant - MEDIUM**
