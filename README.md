@@ -7,250 +7,408 @@ A proactive compliance risk mitigation tool for e-commerce Customer Service AI s
 
 ---
 
-About This Project:
-ARIA (AI Risk & Compliance Intelligence Assistant) helps AI Compliance Managers proactively monitor, assess and remediate compliance risks in customer service AI systems. It covers three major regulatory frameworks - the EU AI Act, GDPR and CCPA, and translates complex legal obligations into an operational workflow that a non-lawyer can act on daily.
-The tool was built as a portfolio prototype to demonstrate:
+## Why ARIA?
 
-Deep understanding of AI governance and data privacy regulations
-Ability to translate regulatory complexity into operational tools
-Product thinking: user personas, use cases, information architecture
-Cross-functional awareness across Tech, Legal, Data and CS Operations
+**ARIA** stands for **A**I **R**isk & Compliance **I**ntelligence **A**ssistant.
 
+The name was chosen deliberately:
+- The acronym maps directly to what the tool does — anyone reading it understands the domain instantly
+- It signals a proper product identity, not just a dashboard
+- In music, an *aria* is a precise, expressive solo performance — technically demanding and purposeful. That felt right for a governance tool designed to surface clear signal from complex regulatory noise
 
-Build Notes
+---
 
-Built from scratch using VS Code, learning in real time
-Every line of code typed manually
-Total build time: approximately 9 hours
-Tool: HTML, CSS, vanilla JavaScript - single file, zero dependencies
+## About This Project
 
+ARIA helps AI Operations Managers proactively monitor, assess, and remediate compliance risks in customer service AI systems. It covers three major regulatory frameworks — **EU AI Act**, **GDPR**, and **CCPA** — and translates complex legal obligations into an operational workflow that a non-lawyer can act on daily.
 
-The Problem This Tool Solves
-E-commerce companies are rapidly deploying AI in customer service - chatbots, auto-routing, sentiment analysis, fraud detection. This deployment is outpacing compliance infrastructure. The result: significant regulatory exposure.
-Risk AreaRegulationReal ExposureAI chatbot doesn't identify itself as AIEU AI Act Art. 52Fines up to €15MPII collected in chat without lawful basisGDPR Art. 6, 32Data breach liabilityAutomated refund/resolution decisionsEU AI Act Art. 14Customer right to human review not metRouting bias by language/demographicEU AI Act Art. 10Discriminatory service accessChat logs retained beyond policyGDPR Art. 5(e)Right to deletion violationsNo audit trail for AI decisionsEU AI Act Art. 12Cannot respond to regulatory enquiry
+### The Problem This Tool Solves
+
+E-commerce companies are rapidly deploying AI in customer service — chatbots, auto-routing, sentiment analysis, fraud detection. This deployment is outpacing compliance infrastructure. The result: significant regulatory exposure.
+
+| Risk Area | Regulation | Real Exposure |
+|---|---|---|
+| AI chatbot doesn't identify itself | EU AI Act Art. 52 | Fines up to €15M |
+| PII collected without lawful basis | GDPR Art. 6, 32 | Data breach liability |
+| Automated decisions without human review | EU AI Act Art. 14 | Customer rights violated |
+| Routing bias by language/demographic | EU AI Act Art. 10 | Discriminatory service access |
+| Chat logs retained beyond policy | GDPR Art. 5(e) | Right to deletion violations |
+| No audit trail for AI decisions | EU AI Act Art. 12 | Cannot respond to regulators |
+
 Most CS teams lack a dedicated compliance monitoring layer for AI systems. ARIA provides the AI Ops Manager with a single command centre to be proactive, cross-functional, and audit-ready.
 
-The 4 CS AI Systems Being Monitored
-1. CS Chatbot v2.4 — 32% Compliant — CRITICAL
-The customer-facing conversational AI. The one customers type to when they contact support. It handles order enquiries, returns, refunds, and complaints. The most visible and most heavily regulated system because it directly interacts with customers. Currently the worst performer with 8 open issues.
-2. Auto-Routing Engine — 61% Compliant — HIGH
-An invisible system customers never see. When a customer contacts support, this AI reads the message and routes it to the right team — returns, billing, complaints, or the chatbot. It makes routing decisions thousands of times a day. A 23% language bias issue lives here — it's routing non-English speakers to the AI bot more often than English speakers.
-3. Sentiment Classifier — 79% Compliant — MEDIUM
-Reads every customer message in real time and scores the emotional tone — frustrated, neutral, satisfied, angry. Uses that score to flag high-risk conversations for priority human handling. 2 open issues, likely around profiling of customer emotional states under GDPR Art. 22.
-4. Return Fraud Detector — 91% Compliant — LOW
-A machine learning model that analyses return requests and assigns a fraud probability score. Flags unusual patterns for human review. The healthiest system at 91%. The 1 remaining issue relates to documenting decision criteria so wrongly-flagged customers can challenge the decision — required under GDPR Art. 22 and EU AI Act Art. 14.
+---
 
-The 6 Modules — Detailed Explanation
+## Build Notes
 
-01 · Dashboard — Compliance Overview
-Purpose: The morning briefing screen. Everything critical surfaced in one view so the AI Ops Manager can prioritise their day in under 60 seconds.
-The 4 KPI Cards:
+| | |
+|---|---|
+| **Built by** | Seema Sherief |
+| **Build date** | March 15–16, 2025 (overnight session) |
+| **Starting point** | Zero HTML/CSS/JavaScript experience |
+| **Build time** | Approximately 9 hours |
+| **Tool used** | VS Code |
+| **Technology** | HTML, CSS, vanilla JavaScript — single file, zero dependencies |
 
-Overall Risk Score — 72/100 — A composite weighted score across all risk categories. Amber because it is in the warning zone. Think of it like a credit score but for AI compliance. The higher the number, the more urgent the risk.
-EU AI Act Readiness — 68% — Out of all applicable EU AI Act requirements, 68% are currently being met. Calculated by scoring 8 specific articles as compliant (100%), partial (50%), or non-compliant (0%) and averaging the results. Green because it is trending upward.
-Open Violations — 14 — 14 active compliance problems right now, broken down as: 3 Critical, 6 High, 4 Medium, 1 Low. Red because the critical count demands immediate attention.
-Interactions Scanned — 24,891 · 98.2% coverage — 24,891 customer service conversations were analyzed for compliance issues in the last 30 days. 98.2% coverage means that out of every 100 conversations, ARIA successfully scanned 98.2 of them. The 1.8% gap represents conversations on channels not yet fully connected to ARIA.
+Every line of code was typed manually. This project demonstrates that operational expertise combined with learning agility can produce production-quality tooling — exactly the skillset required for an AI Operations Manager role.
 
-How the Risk Score (72) is calculated:
-The composite score is a weighted average across 6 risk categories. Each category carries a different weight because some matter more legally and financially than others:
-CategoryWeightScoreContributionData Privacy25%8521.25AI Transparency20%7414.80Human Oversight20%6813.60Bias & Fairness15%619.15Accuracy12%455.40Logging & Audit8%786.24Total100%—≈ 72
-Data Privacy carries the highest weight (25%) because GDPR fines are the largest financial risk — up to 4% of global annual turnover. Logging carries the least weight (8%) because while important, it does not directly harm customers.
-How EU AI Act Readiness (68%) is calculated:
-8 specific EU AI Act articles were assessed. Each is scored as Passing (100%), In Progress (50%), or Failing (0%):
-ArticleStatusScoreArt. 52 — TransparencyFAILING0%Art. 14 — Human OversightFAILING0%Art. 12 — LoggingIN PROGRESS50%Art. 9 — Risk ManagementPASSING100%Art. 13 — Transparency to deployersPASSING100%Art. 10 — Data governancePASSING100%Art. 11 — Technical docsIN PROGRESS50%Art. 15 — Accuracy testingPASSING100%
-Average = (0+0+50+100+100+100+50+100) ÷ 8 = 62.5%, weighted by article importance = 68%
-Why only 3 Critical and 6 High out of 14 violations?
+---
+
+## The 4 CS AI Systems Being Monitored
+
+**1. CS Chatbot v2.4 — 32% Compliant — 🔴 CRITICAL**
+The customer-facing conversational AI. Handles order enquiries, returns, refunds, and complaints directly with customers. The most visible and most heavily regulated system because it interacts with customers at scale. Currently the worst performer with 8 open compliance issues.
+
+**2. Auto-Routing Engine — 61% Compliant — 🟠 HIGH**
+An invisible system customers never see. Reads incoming messages and routes them to the right team — returns, billing, complaints, or the chatbot. Makes routing decisions thousands of times per day. A 23% language bias issue lives here — it routes non-English speakers to the AI bot more often than English speakers, a potential discriminatory outcome under EU AI Act Art. 10.
+
+**3. Sentiment Classifier — 79% Compliant — 🟡 MEDIUM**
+Reads every customer message in real time and scores the emotional tone — frustrated, neutral, satisfied, angry. Uses that score to flag high-risk conversations for priority human handling. 2 open issues around profiling of customer emotional states under GDPR Art. 22.
+
+**4. Return Fraud Detector — 91% Compliant — 🟢 LOW**
+A machine learning model that analyses return requests and assigns a fraud probability score. The healthiest system at 91% compliant. The 1 remaining issue relates to documenting decision criteria so wrongly-flagged customers can challenge the decision — required under GDPR Art. 22 and EU AI Act Art. 14.
+
+---
+
+## The 6 Modules — Full Explanation
+
+---
+
+### 01 · Dashboard — Compliance Overview
+
+**Purpose:** The morning briefing screen. Everything critical surfaced in one view so the AI Ops Manager can prioritise their day in under 60 seconds.
+
+#### The 4 KPI Cards
+
+**Overall Risk Score — 72/100**
+
+A composite weighted score across 6 risk categories. Amber because it is in the warning zone. Calculated as follows:
+
+| Category | Weight | Score | Contribution |
+|---|---|---|---|
+| Data Privacy | 25% | 85 | 21.25 |
+| AI Transparency | 20% | 74 | 14.80 |
+| Human Oversight | 20% | 68 | 13.60 |
+| Bias & Fairness | 15% | 61 | 9.15 |
+| Accuracy | 12% | 45 | 5.40 |
+| Logging & Audit | 8% | 78 | 6.24 |
+| **Total** | **100%** | — | **≈ 72** |
+
+Data Privacy carries the highest weight (25%) because GDPR fines are the largest financial risk — up to 4% of global annual turnover. Logging carries the least (8%) because while important, it does not directly harm customers.
+
+**EU AI Act Readiness — 68%**
+
+Calculated by scoring 8 specific EU AI Act articles as Passing (100%), In Progress (50%), or Failing (0%):
+
+| Article | Status | Score |
+|---|---|---|
+| Art. 52 — Transparency to users | FAILING | 0% |
+| Art. 14 — Human Oversight | FAILING | 0% |
+| Art. 12 — Logging | IN PROGRESS | 50% |
+| Art. 11 — Technical documentation | IN PROGRESS | 50% |
+| Art. 9 — Risk Management | PASSING | 100% |
+| Art. 13 — Transparency to deployers | PASSING | 100% |
+| Art. 10 — Data governance | PASSING | 100% |
+| Art. 15 — Accuracy testing | PASSING | 100% |
+
+Average = (0+0+50+50+100+100+100+100) ÷ 8 = **62.5%**, weighted by article importance = **68%**
+
+**Open Violations — 14**
+
 The 14 violations are tiered by urgency:
 
-3 Critical — Direct legal violations with immediate financial consequences. Must fix within 30 days.
-6 High — Serious regulatory exposure but not immediately actionable by regulators. Fix within 90 days.
-4 Medium — Bad practice but low immediate risk. Fix within 180 days.
-1 Low — Minor non-conformance, negligible risk.
+| Severity | Count | Timeframe to Fix |
+|---|---|---|
+| 🔴 Critical | 3 | Within 30 days |
+| 🟠 High | 6 | Within 90 days |
+| 🟡 Medium | 4 | Within 180 days |
+| 🟢 Low | 1 | Best effort |
+| **Total** | **14** | |
 
-The 4 Live Compliance Alerts explained:
-Alert 1 — AI agent not disclosing automated nature to customers
-The CS chatbot is having conversations without ever saying it is an AI. 847 customers today were misled into thinking they were talking to a human. EU AI Act Article 52(1) makes this illegal. Fines up to €15 million. The version number CS Bot v2.4 matters because when v2.5 ships with the fix, the violation stops — and that is traceable.
-Alert 2 — PII data retained beyond policy limit
-Customer personal data — names, email addresses, order details — is being stored longer than the company's own 90-day retention policy. 12,400 records are currently at risk. GDPR Article 5(e) requires data minimisation and storage limitation. CCPA §1798.100 gives customers the right to know their data is not held indefinitely.
-Alert 3 — Escalation rate disparity across customer segments
-The Auto-Routing Engine is sending English-speaking customers to human agents 23% more often than non-English speakers. Non-English customers are kept with the AI bot longer even when their issues are equally complex. EU AI Act Article 10 requires AI systems not to produce discriminatory outcomes. A 23% measurable gap based on language is a potential bias violation.
-Alert 4 — Missing human override documentation
-Three types of AI decisions have no written procedure for when and how a human agent should step in. EU AI Act Article 14 requires that oversight mechanisms exist AND are documented. Having an escalation button is not enough — there must be a written procedure that agents follow.
+**Interactions Scanned — 24,891 · 98.2% Coverage**
 
-02 · AI Assessment
-Purpose: A structured tool to run a formal compliance audit on any of the four CS AI systems. Turns a complex regulatory checklist into an operational form any manager can complete.
-The Assessment Form:
+24,891 customer service conversations were analyzed in the last 30 days. 98.2% coverage means ARIA successfully scanned 98.2 out of every 100 conversations. The 1.8% gap represents channels not yet fully connected to the monitoring pipeline.
 
-Select which AI system to audit
-Select the type of assessment — Full Audit, EU AI Act Gap Analysis, GDPR Privacy Assessment, Bias Evaluation, or Human Oversight Review
-Describe the system in plain English to provide context
-List any known risk areas already suspected
-Click Run Assessment — a scanning animation plays then a findings report appears
+#### The 4 Live Compliance Alerts
 
-The 8 EU AI Act Articles in the Checklist — explained:
-Art. 52(1) — Transparency to End Users
-When a customer interacts with an AI — chatbot, voice assistant, automated email — the AI must tell them it is an AI before or at the start of the interaction. This is the most talked-about EU AI Act obligation. Customers have the legal right to know they are not talking to a human.
-Art. 14 — Human Oversight
-AI systems must be designed so humans can monitor, intervene, and override the AI at any time. This means documented procedures, trained staff, and functional override controls. It is not enough to say humans can take over — you must prove how and when with written evidence.
-Art. 9 — Risk Management System
-Before deploying any AI system, a continuous risk management process must exist. This means identifying risks before launch, testing for them, and continuing to monitor after deployment. It is an ongoing obligation — not a one-time exercise.
-Art. 11 — Technical Documentation
-A detailed written record of the AI system must exist covering: how it was designed, what data it was trained on, how it was tested, what its performance metrics are, and what its known limitations are. Must be maintained and updated when the system changes.
-Art. 12 — Logging and Record-Keeping
-The AI system must automatically record its own decisions and actions with timestamps. If a customer or regulator asks "why did the AI refuse my refund on March 15th at 10:16am?" — the log must answer that question. Without this, the company cannot defend its decisions.
-Art. 10 — Data Governance
-The data used to train and operate the AI must be relevant, accurate, complete, and unbiased. Companies must verify that training data does not contain historical biases causing the AI to treat different customer groups unfairly. This is the article behind the 23% language routing gap.
-Art. 43 — Conformity Assessment
-Before a high-risk AI system is deployed to the public, it must go through a formal conformity assessment — confirming it meets all EU AI Act requirements. Think of it like an MOT certificate for AI systems. Must be documented and renewed when the system changes significantly.
-Art. 15 — Accuracy, Robustness and Cybersecurity
-The AI must perform accurately and consistently across normal use and edge cases. Must be tested against errors, unexpected inputs, and attempted manipulation. For a CS chatbot this means testing what happens when a customer types something confusing, abusive, or designed to trick the system.
-The Assessment Report — explained in full:
-After clicking Run Assessment, the report contains three layers:
-Layer 1 — Three Summary Boxes
+**🔴 Alert 1 — AI agent not disclosing automated nature to customers**
+The CS chatbot is having conversations without ever saying it is an AI. 847 customers today were misled into thinking they were talking to a human. EU AI Act Article 52(1) makes this illegal. Fines up to €15 million. The CS Bot v2.4 version number matters — when v2.5 ships with the fix, the violation stops and that improvement is traceable.
 
-3 Critical Gaps — must fix immediately, direct legal violations
-5 High Gaps — serious but slightly less urgent
-4 Compliant Items — what is already working correctly
+**🔴 Alert 2 — PII data retained beyond policy limit in chat logs**
+Customer personal data — names, email addresses, order details — is being stored longer than the company's own 90-day retention policy. 12,400 records are currently at risk. GDPR Article 5(e) requires storage limitation. CCPA §1798.100 gives customers the right to know their data is not held indefinitely.
 
-Layer 2 — Findings Table
-FindingWhy It MattersAI identity not disclosed — Art. 52(1) — CRITICAL847 violations daily. Fines up to €15M. Most urgent fix.No human escalation pathway — Art. 14 — CRITICALMandatory regulatory review required. Cannot be compliant without this.PII in unencrypted logs — GDPR Art. 32 — CRITICALData breach liability. Class action exposure. GDPR fines up to 4% of turnover.English customers escalated 23% more — Art. 10 — HIGHDiscriminatory service access. Measurable and documented — regulators treat this seriously.No automated logging of AI decisions — Art. 12 — HIGHAuditability gap. Cannot produce decision records if asked by regulator.
-Layer 3 — Action Buttons
+**🟠 Alert 3 — Escalation rate disparity across customer segments**
+The Auto-Routing Engine sends English-speaking customers to human agents 23% more often than non-English speakers. Non-English customers are kept with the AI bot longer even when their issues are equally complex. EU AI Act Article 10 requires AI systems not to produce discriminatory outcomes. A 23% measurable gap based on language is a potential bias violation.
 
-Generate Documentation → goes directly to Tab 5 to produce required documents
-View Remediation Plan → goes directly to Tab 6 to track fixes
+**🟠 Alert 4 — Missing human override documentation for AI decisions**
+Three types of AI decisions have no written procedure for when and how a human agent should step in. EU AI Act Article 14 requires oversight mechanisms to exist AND be documented. Having an escalation button is not enough — there must be a written procedure that agents actively follow.
 
+---
 
-03 · Interaction Analyzer
-Purpose: Catches violations at the ground level — inside individual customer conversations. While the Dashboard shows systemic trends, this tab shows exactly what is going wrong in specific interactions.
-The Sample Conversation — Case #CS-48291:
-Six messages with compliance flags appearing inline inside the conversation bubbles:
+### 02 · AI Assessment
 
-Customer asks about a missing order
-AI responds without disclosing it is an AI ← No AI disclosure flag
-Customer provides order number and email address
-AI confirms the issue and processes a refund automatically ← PII collected flag + Auto-decision flag
-Customer asks for replacement instead of refund
-AI refuses and offers no human option ← No escalation offered flag
+**Purpose:** A structured tool to run a formal compliance audit on any of the four CS AI systems. Turns complex regulatory requirements into an operational form any manager can complete.
 
-The flags appear directly inside the bubble where the violation happened so you can pinpoint the exact moment of non-compliance.
-Interaction Risk Score — 88/100:
-This single conversation scores 88 — very high risk. Badges show 2 Critical, 2 High, and 1 Compliant item. The one compliant item is that the AI correctly identified the order issue and provided accurate information — not everything was wrong.
-Bulk Scan Summary — Last 7 Days:
-Shows systemic violation volumes across all scanned conversations:
-Flag TypeCountTrendNo AI disclosure847▲ +12% — worseningPII without consent392▲ +4% — worseningAuto-decision no review219▼ -8% — improvingNo escalation offered541▲ +2% — slightly worsening
-The downward trend on auto-decisions shows remediation work is starting to have impact.
+#### The Assessment Form
+- Select which AI system to audit
+- Select the assessment type — Full Audit, EU AI Act Gap Analysis, GDPR Privacy Assessment, Bias Evaluation, or Human Oversight Review
+- Describe the system in plain English for context
+- List any known risk areas already suspected
+- Click Run Assessment — a scanning animation plays then a findings report appears
 
-04 · Regulatory Map
-Purpose: A complete reference map showing which laws apply, which specific articles matter for CS AI, and the current compliance status of each one. Solves the problem of overlapping obligations across multiple frameworks.
-Three Regulation Cards:
-EU AI Act
-Applies as a customer-facing AI system. Transparency obligations are mandatory regardless of risk tier. Key failing articles: Art. 52 (transparency) and Art. 14 (human oversight).
-GDPR
-Applies to all EU customer personal data. Chat logs, email addresses, and behavioural data all constitute personal data under Art. 4. Key failing articles: Art. 6 (no clear lawful basis for PII collection) and Art. 32 (unencrypted logs).
-CCPA / CPRA
-Applies to California residents regardless of company location if revenue or data thresholds are met. Key areas: right to know, right to delete, right to opt out of data sharing.
-Cross-Regulation Impact Matrix:
-Shows that one operational problem often violates multiple regulations simultaneously. For example — PII collection in chat violates EU AI Act Art. 10, GDPR Art. 6 and 32, CCPA §1798.100, AND internal policy P-PRIV-03 all at the same time. This matrix helps prioritise fixes that deliver the most compliance coverage per remediation effort.
+In a production environment, the description field would send context to an LLM API which would generate a real customised assessment. In this prototype the results demonstrate what that output would look like.
 
-05 · Doc Generator
-Purpose: Produces the actual regulatory documents that CS AI systems are legally required to have. Accelerates what normally takes weeks into hours.
-The 7 Document Types:
-1. EU AI Act Technical Documentation (Art. 11)
-The formal technical record of how the AI system was built, what data it uses, and how it performs. Required before deployment and must be kept updated.
-2. GDPR Data Protection Impact Assessment (DPIA)
-Mandatory when processing personal data at scale. Identifies privacy risks and documents mitigation measures. Required under GDPR Art. 35 when AI processes sensitive customer data.
-3. AI Transparency Notice
-The customer-facing statement explaining they are talking to an AI and what their rights are. Required under EU AI Act Art. 52. Must appear at the start of every AI interaction.
-4. Human Oversight Procedure Manual
-The written procedure agents follow when reviewing or overriding an AI decision. Required under EU AI Act Art. 14. Cannot be compliant without this document existing and being actively used.
-5. Bias Audit Report
-Documents the results of testing the AI for unfair treatment of different customer groups. Required under EU AI Act Art. 10. The 23% language routing gap would be documented and remediated here.
-6. Incident Response Playbook
-Step-by-step procedures for data breaches or AI failures. GDPR Art. 33 requires notifying regulators within 72 hours of a breach. This playbook ensures the team knows exactly what to do when something goes wrong.
-7. Conformity Self-Assessment (Art. 43)
-A self-evaluation confirming the system meets EU AI Act requirements before deployment. Think of it as the AI system's certificate of roadworthiness.
-Document Library:
-Tracks all existing documents with status — Approved, Draft, In Review, or Missing. The Human Oversight Manual is flagged as Missing — a critical gap visible right on screen.
+#### The 8 EU AI Act Articles in the Checklist
 
-06 · Remediation & Action Plan
-Purpose: The execution layer. After the Dashboard identifies problems and the Assessment details them, this tab tracks who is fixing what, by when, and how far along they are. Turns compliance gaps into managed work items.
-The 4 Summary Cards:
+| Article | Requirement | Current Status |
+|---|---|---|
+| Art. 52(1) | Customers must be told they are talking to AI | ❌ FAILING |
+| Art. 14 | Human override procedures must be documented | ❌ FAILING |
+| Art. 9 | Ongoing risk management process must exist | ✅ PASSING |
+| Art. 11 | Full technical documentation must be maintained | ⚠️ IN PROGRESS |
+| Art. 12 | All AI decisions must be automatically logged | ❌ FAILING |
+| Art. 10 | Training data must be unbiased and governed | ✅ PASSING |
+| Art. 43 | Conformity assessment must be completed before deployment | ⚠️ IN PROGRESS |
+| Art. 15 | System must be tested for accuracy and robustness | ✅ PASSING |
 
-Critical — Act Now — 3 items — resolve within 30 days
-High Priority — 6 items — resolve within 90 days
-Medium Priority — 4 items — resolve within 180 days
-Resolved This Month — 7 items — up from 3 last month (positive trend)
+**Art. 52(1) — Transparency to End Users**
+When a customer interacts with an AI the system must disclose this at the start of the interaction. Customers have the legal right to know they are not talking to a human.
 
-The 6 Active Remediation Items:
-IDIssueOwnerDeadlineProgressStatusREM-001Add AI disclosure at chat startTech LeadApr 1565%In ProgressREM-002Encrypt PII in chat logsData EngApr 2220%BEHIND — most urgentREM-003Document human override proceduresAI Ops MgrMay 140%In ProgressREM-004Implement 90-day log retentionData EngMay 1580%Nearly doneREM-005Fix multilingual routing biasML TeamJun 110%Just startedREM-006Enable automated event loggingTech LeadJun 1555%In Progress
-REM-002 is the most critical item to watch — PII encryption is only 20% complete with a deadline in days.
+**Art. 14 — Human Oversight**
+AI systems must be designed so humans can monitor, intervene, and override at any time. Not enough to say humans can take over — you must prove how and when with written documented procedures.
 
-Regulations Covered
-EU AI Act (2024 — In Force)
+**Art. 9 — Risk Management System**
+A continuous risk management process must exist before and after deployment. Not a one-time exercise — an ongoing obligation.
 
-Art. 9 — Risk Management
-Art. 10 — Data Governance & Bias
-Art. 11 — Technical Documentation
-Art. 12 — Logging & Record-Keeping
-Art. 13 — Transparency to Deployers
-Art. 14 — Human Oversight
-Art. 15 — Accuracy & Robustness
-Art. 43 — Conformity Assessment
-Art. 52 — Transparency to Users
+**Art. 11 — Technical Documentation**
+A detailed written record of system design, training data, testing, performance metrics, and known limitations. Must be maintained and updated when the system changes.
 
-GDPR (EU 2016/679)
+**Art. 12 — Logging and Record-Keeping**
+The AI must automatically record its own decisions with timestamps. If a regulator asks why the AI refused a refund on a specific date — the log must answer that question.
 
-Art. 5 — Data minimisation and storage limitation
-Art. 6 — Lawful basis for processing
-Art. 22 — Automated decision-making
-Art. 30 — Records of processing
-Art. 32 — Security of processing
-Art. 33 — Breach notification (72 hours)
-Art. 35 — Data Protection Impact Assessment
+**Art. 10 — Data Governance**
+Training and operational data must be relevant, accurate, complete, and free from bias. The 23% language routing gap is a direct Art. 10 violation.
 
-CCPA / CPRA (California)
+**Art. 43 — Conformity Assessment**
+A formal review confirming the system meets all EU AI Act requirements before deployment. Think of it as an MOT certificate for AI systems.
 
-§1798.100 — Right to know
-§1798.105 — Right to delete
-§1798.120 — Right to opt-out
-§1798.140 — Sensitive personal information
-§1798.150 — Security and breach liability
+**Art. 15 — Accuracy, Robustness and Cybersecurity**
+System must perform accurately across normal use and edge cases. Must be tested against errors, unexpected inputs, and attempted manipulation.
 
+#### The Assessment Report
 
-Technology
+After clicking Run Assessment, the report surfaces:
 
-HTML — Structure and content
-CSS — Visual design, layout, animations
-JavaScript — Tab navigation, interactive assessment, doc generation
-Single-file architecture — no frameworks, no dependencies, no build process
-Deployable anywhere with zero infrastructure
-Fully functional offline — open the HTML file directly in any browser
+| Finding | Regulation | Impact | Severity |
+|---|---|---|---|
+| AI identity not disclosed to customers | EU AI Act Art. 52(1) | Fines up to €15M | 🔴 CRITICAL |
+| No human escalation pathway | EU AI Act Art. 14 | Mandatory regulatory review | 🔴 CRITICAL |
+| PII in unencrypted chat logs | GDPR Art. 32 | Data breach liability | 🔴 CRITICAL |
+| English customers escalated 23% more | EU AI Act Art. 10 | Discriminatory outcomes | 🟠 HIGH |
+| No automated logging of AI decisions | EU AI Act Art. 12 | Auditability gap | 🟠 HIGH |
 
+---
 
-Production Architecture (If Built for Real)
-In a production environment this would connect to:
-Frontend (React/Next.js)
+### 03 · Interaction Analyzer
+
+**Purpose:** Catches violations at the ground level — inside individual customer conversations. While the Dashboard shows systemic trends, this tab shows exactly what is going wrong in specific interactions in real time.
+
+#### Sample Conversation — Case #CS-48291
+
+Six messages with compliance flags appearing inline inside the conversation bubbles — showing the exact moment each violation occurs:
+
+| Message | Speaker | Compliance Flag |
+|---|---|---|
+| "Hi, I need help with my order..." | Customer | — |
+| "Hi! I'm here to help. Can you provide your email?" | AI Agent | ⚠️ No AI disclosure |
+| "It's #ORD-992847. My email is sarah.jones@..." | Customer | — |
+| "I'm processing a full refund now." | AI Agent | ⚠️ PII collected · ⚠️ Auto-decision |
+| "Actually I'd prefer a replacement..." | Customer | — |
+| "Refunds are the only option for orders over 14 days." | AI Agent | ⚠️ No escalation offered |
+
+**Interaction Risk Score — 88/100**
+2 Critical violations + 2 High violations + 1 Compliant item = 88/100 risk score. The one compliant item: the AI correctly identified the order issue and provided accurate information.
+
+#### Bulk Scan Summary — Last 7 Days
+
+| Flag Type | Count | Trend |
+|---|---|---|
+| No AI disclosure | 847 | ▲ +12% — worsening |
+| PII without consent | 392 | ▲ +4% — worsening |
+| Auto-decision no review | 219 | ▼ -8% — improving |
+| No escalation offered | 541 | ▲ +2% — slightly worsening |
+
+The downward trend on auto-decisions shows remediation work is beginning to have measurable impact.
+
+---
+
+### 04 · Regulatory Map
+
+**Purpose:** A complete reference map showing which laws apply, which articles matter for CS AI, and current compliance status. Solves the problem of overlapping obligations across multiple frameworks — one operational problem can violate multiple regulations simultaneously.
+
+#### EU AI Act
+Applies to customer-facing AI systems. Transparency obligations are mandatory regardless of risk tier. Key failing articles: Art. 52 (transparency) and Art. 14 (human oversight).
+
+#### GDPR
+Applies to all EU customer personal data. Chat logs, email addresses, and behavioural data all constitute personal data under Art. 4. Key failing articles: Art. 6 (no lawful basis for PII collection) and Art. 32 (unencrypted logs).
+
+#### CCPA / CPRA
+Applies to California residents regardless of company location if thresholds are met. Key obligations: right to know, right to delete, right to opt out of data sharing.
+
+#### Cross-Regulation Impact Matrix
+
+| CS AI Risk Area | EU AI Act | GDPR | CCPA | Internal Policy | Status |
+|---|---|---|---|---|---|
+| AI identity disclosure | Art. 52 | — | — | P-CS-01 | 🔴 FAILING |
+| PII collection in chat | Art. 10 | Art. 6, 32 | §1798.100 | P-PRIV-03 | 🔴 FAILING |
+| Automated decisions | Art. 14 | Art. 22 | — | P-CS-07 | 🟠 PARTIAL |
+| Sentiment / profiling | Art. 10 | Art. 22 | §1798.140 | P-PRIV-05 | 🟡 REVIEW |
+| Data retention in logs | — | Art. 5(e) | §1798.105 | P-DATA-02 | 🟠 NON-COMPLIANT |
+| Bias in routing logic | Art. 10 | — | — | P-CS-12 | 🟠 INVESTIGATING |
+
+---
+
+### 05 · Doc Generator
+
+**Purpose:** Produces the actual regulatory documents CS AI systems are legally required to have. Accelerates what normally takes weeks into hours.
+
+#### The 7 Document Types
+
+| Document | Regulation | Purpose |
+|---|---|---|
+| EU AI Act Technical Documentation | Art. 11 | Formal record of system design, training data, and performance |
+| GDPR Data Protection Impact Assessment (DPIA) | Art. 35 | Identifies privacy risks and mitigation measures |
+| AI Transparency Notice | Art. 52 | Customer-facing statement confirming AI interaction |
+| Human Oversight Procedure Manual | Art. 14 | Written procedures agents follow to review or override AI |
+| Bias Audit Report | Art. 10 | Documents fairness testing results across customer groups |
+| Incident Response Playbook | GDPR Art. 33 | Step-by-step breach response — 72-hour notification requirement |
+| Conformity Self-Assessment | Art. 43 | Pre-deployment certificate of regulatory compliance |
+
+#### Document Library Status
+
+| Document | Status |
+|---|---|
+| AI Transparency Notice v2 | 🟡 DRAFT |
+| DPIA — CS Chatbot v2.4 | ✅ APPROVED |
+| Human Oversight Manual v1 | 🔴 MISSING — critical gap |
+| Bias Audit Report Q1-2025 | 🟡 IN REVIEW |
+| Incident Response Playbook v3 | ✅ APPROVED |
+
+---
+
+### 06 · Remediation & Action Plan
+
+**Purpose:** The execution layer. Turns compliance gaps into managed work items with owners, deadlines, and progress visibility. The AI Ops Manager can run a weekly standup directly from this screen.
+
+#### Summary
+
+| Priority | Count | Timeframe |
+|---|---|---|
+| 🔴 Critical — Act Now | 3 | 30 days |
+| 🟠 High Priority | 6 | 90 days |
+| 🟡 Medium Priority | 4 | 180 days |
+| ✅ Resolved This Month | 7 | — |
+
+#### Active Remediation Items
+
+| ID | Issue | Owner | Deadline | Progress | Status |
+|---|---|---|---|---|---|
+| REM-001 | Add AI disclosure at chat start | Tech Lead | Apr 15 | 65% | 🟡 IN PROGRESS |
+| REM-002 | Encrypt PII in chat logs | Data Eng | Apr 22 | 20% | 🔴 BEHIND |
+| REM-003 | Document human override procedures | AI Ops Mgr | May 1 | 40% | 🟡 IN PROGRESS |
+| REM-004 | Implement 90-day log retention | Data Eng | May 15 | 80% | 🟢 NEAR DONE |
+| REM-005 | Fix multilingual routing bias | ML Team | Jun 1 | 10% | 🟠 JUST STARTED |
+| REM-006 | Enable automated event logging | Tech Lead | Jun 15 | 55% | 🟡 IN PROGRESS |
+
+> **Watch item:** REM-002 is most critical — PII encryption is only 20% complete with an imminent deadline.
+
+---
+
+## Regulations Covered
+
+### EU AI Act (2024 — In Force)
+| Article | Requirement |
+|---|---|
+| Art. 9 | Risk Management |
+| Art. 10 | Data Governance & Bias |
+| Art. 11 | Technical Documentation |
+| Art. 12 | Logging & Record-Keeping |
+| Art. 13 | Transparency to Deployers |
+| Art. 14 | Human Oversight |
+| Art. 15 | Accuracy & Robustness |
+| Art. 43 | Conformity Assessment |
+| Art. 52 | Transparency to Users |
+
+### GDPR (EU 2016/679)
+| Article | Requirement |
+|---|---|
+| Art. 5 | Data minimisation and storage limitation |
+| Art. 6 | Lawful basis for processing |
+| Art. 22 | Automated decision-making rights |
+| Art. 30 | Records of processing activities |
+| Art. 32 | Security of processing |
+| Art. 33 | Breach notification within 72 hours |
+| Art. 35 | Data Protection Impact Assessment |
+
+### CCPA / CPRA (California)
+| Section | Requirement |
+|---|---|
+| §1798.100 | Right to know what data is collected |
+| §1798.105 | Right to delete personal information |
+| §1798.120 | Right to opt-out of data sharing |
+| §1798.140 | Sensitive personal information definition |
+| §1798.150 | Security and breach liability |
+
+---
+
+## Technology
+
+```
+Single-file HTML application
+├── HTML        — Structure and content
+├── CSS         — Visual design, layout, animations
+└── JavaScript  — Navigation, interactivity, simulated workflows
+```
+
+- No frameworks · No dependencies · No build process
+- Fully functional offline — open the HTML file directly in any browser
+- Deployable anywhere with zero infrastructure
+
+---
+
+## Production Architecture
+
+In production this tool would connect to live systems:
+
+```
+Frontend (React / Next.js)
+         ↓
+   API Layer (Node.js)
+    ↓         ↓         ↓
+LLM API   CS Platform  Compliance
+(Claude)  APIs         Rules Engine
     ↓
-API Layer (Node.js / FastAPI)
+Database ← Findings, documents, remediation state
     ↓
-[LLM API — Claude]  [CS Platform APIs]  [Compliance Rules Engine]
-    ↓                      ↓                      ↓
-Assessment             Live Chat              Regulatory
-Generation             Stream                 Rule Library
-    ↓
-[Database] ← Findings, documents, remediation state
-    ↓
-[Immutable Audit Log] ← Cryptographically signed compliance events
-The prototype simulates all AI-powered workflows using timed reveals. In production these would be real API calls to an LLM returning live compliance analysis.
+Immutable Audit Log ← Signed compliance events
+```
 
-Portfolio Context
-This tool was built to demonstrate candidacy for AI Operations, AI Governance, and Responsible AI roles. It shows:
+The prototype simulates all AI-powered workflows using timed reveals. In production these would be real LLM API calls returning live compliance analysis.
 
-Regulatory knowledge — EU AI Act, GDPR, CCPA applied to real operational scenarios
-Product thinking — user persona, use cases, end-to-end workflow design
-Technical literacy — built in code, understands architecture and API integration
-Operational experience — remediation tracking, cross-functional ownership, escalation workflows
-Communication — complex regulatory concepts translated into plain operational language
+---
 
+## Portfolio Context
 
-Built by Seema Sherief 
+This tool demonstrates candidacy for AI Operations, AI Governance, and Responsible AI roles:
+
+| Skill Demonstrated | How |
+|---|---|
+| Regulatory knowledge | EU AI Act, GDPR, CCPA applied to real operational scenarios |
+| Product thinking | User persona, use cases, end-to-end workflow design |
+| Technical literacy | Built in code, understands API integration architecture |
+| Operational experience | Remediation tracking, cross-functional ownership, escalation workflows |
+| Communication | Complex regulatory concepts translated into plain operational language |
+
+---
+
+*Built by Seema Sherief
