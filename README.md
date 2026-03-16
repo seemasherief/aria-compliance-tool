@@ -50,4 +50,4 @@ Data is simulated to represent realistic e-commerce CS AI compliance scenarios. 
 
 ---
 
-*Built by Seema Sherief — AI Operation
+*Built by Seema Sherief 
