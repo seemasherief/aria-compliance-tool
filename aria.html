@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARIA — AI Risk & Compliance Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0c0f;
+  --surface: #111318;
+  --border: #1e2330;
+  --accent: #00d4aa;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+  --safe: #10b981;
+  --text: #e8eaf0;
+  --muted: #6b7591;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; }
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 60px; position: sticky; top: 0; z-index: 100; }
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-mark { width: 32px; height: 32px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #000; font-size: 13px; }
+.logo-name { font-size: 19px; font-weight: 700; }
+.logo-sub { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.status-pill { display: flex; align-items: center; gap: 6px; background: rgba(0,212,170,0.12); border: 1px solid rgba(0,212,170,0.2); color: var(--accent); font-size: 11px; padding: 4px 12px; border-radius: 20px; }
+.status-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+.user-badge { font-size: 12px; color: var(--muted); border-left: 1px solid var(--border); padding-left: 16px; }
+.nav { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 60px; z-index: 99; }
+.nav-item { padding: 14px 18px; font-size: 12px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; letter-spacing: 0.5px; user-select: none; }
+.nav-item:hover { color: var(--text); }
+.nav-item.active { color: var(--accent); border-bottom-color: var(--accent); }
+.panel { display: none; padding: 32px; }
+.panel.active { display: block; }
+.page-title { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.page-subtitle { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 28px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 20px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.card-label { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 8px; }
+.card-value { font-size: 32px; font-weight: 700; line-height: 1; margin-bottom: 6px; }
+.card-delta { font-size: 11px; color: var(--muted); }
+.green { color: var(--accent); }
+.amber { color: var(--warn); }
+.red { color: var(--danger); }
+.safe { color: var(--safe); }
+.badge { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; }
+.badge-critical { background: rgba(239,68,68,0.12); color: var(--danger); border: 1px solid rgba(239,68,68,0.25); }
+.badge-high { background: rgba(249,115,22,0.12); color: #f97316; border: 1px solid rgba(249,115,22,0.25); }
+.badge-medium { background: rgba(245,158,11,0.12); color: var(--warn); border: 1px solid rgba(245,158,11,0.25); }
+.badge-low { background: rgba(16,185,129,0.1); color: var(--safe); border: 1px solid rgba(16,185,129,0.25); }
+.badge-info { background: rgba(0,212,170,0.12); color: var(--accent); border: 1px solid rgba(0,212,170,0.25); }
+.section-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+.section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.alert-item { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.alert-item:last-child { border-bottom: none; }
+.alert-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; font-size: 14px; }
+.alert-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+.alert-meta { font-size: 10px; color: var(--muted); }
+.alert-btn { font-size: 10px; color: var(--accent); cursor: pointer; padding: 4px 8px; border: 1px solid rgba(0,212,170,0.2); border-radius: 4px; white-space: nowrap; background: none; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); }
+td { padding: 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+tr:last-child td { border-bottom: none; }
+.progress-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; margin-top: 6px; }
+.progress-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+.risk-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.risk-row:last-child { border-bottom: none; }
+.risk-name { font-size: 12px; color: var(--muted); width: 140px; flex-shrink: 0; }
+.risk-track { flex: 1; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.risk-fill { height: 100%; border-radius: 2px; }
+.risk-val { font-size: 12px; width: 30px; text-align: right; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 9px 18px; border-radius: 7px; font-size: 12px; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif; font-weight: 500; }
+.btn-primary { background: var(--accent); color: #000; }
+.btn-primary:hover { background: #00eec0; }
+.btn-outline { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-outline:hover { color: var(--text); border-color: var(--accent); }
+.form-group { margin-bottom: 20px; }
+.form-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 8px; }
+.form-input, .form-select, .form-textarea { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 10px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; outline: none; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 90px; }
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.check-item:last-child { border-bottom: none; }
+.check-box { width: 18px; height: 18px; border-radius: 4px; border: 1.5px solid var(--border); background: var(--bg); cursor: pointer; flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #000; }
+.check-box.checked { background: var(--accent); border-color: var(--accent); }
+.check-label { font-size: 13px; margin-bottom: 3px; }
+.check-desc { font-size: 11px; color: var(--muted); }
+.scanning { display: none; align-items: center; gap: 10px; font-size: 12px; color: var(--accent); padding: 16px; background: rgba(0,212,170,0.08); border: 1px solid rgba(0,212,170,0.2); border-radius: 8px; margin-bottom: 16px; }
+.scanning.active { display: flex; }
+.scan-dot { width: 5px; height: 5px; background: var(--accent); border-radius: 50%; animation: blink 1.4s infinite; }
+.scan-dot:nth-child(2) { animation-delay: 0.2s; }
+.scan-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100%{opacity:0.3;transform:scale(0.8)} 40%{opacity:1;transform:scale(1)} }
+.result-box { display: none; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px; font-size: 13px; line-height: 1.7; }
+.result-box.show { display: block; }
+.chat-bubble { padding: 12px 16px; border-radius: 10px; margin-bottom: 10px; font-size: 13px; max-width: 85%; }
+.chat-agent { background: #181c24; border: 1px solid var(--border); }
+.chat-customer { background: rgba(0,212,170,0.06); border: 1px solid rgba(0,212,170,0.15); margin-left: auto; }
+.chat-who { font-size: 9px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 5px; }
+.flag { display: inline-flex; align-items: center; gap: 4px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); border-radius: 4px; padding: 2px 6px; font-size: 9px; color: var(--danger); margin-left: 6px; }
+.tl-item { display: flex; gap: 16px; padding-bottom: 18px; position: relative; }
+.tl-item::before { content:''; position:absolute; left:15px; top:32px; bottom:0; width:1px; background: var(--border); }
+.tl-item:last-child::before { display: none; }
+.tl-dot { width:32px; height:32px; border-radius:50%; display:grid; place-items:center; font-size:12px; flex-shrink:0; border:2px solid; }
+.tl-content { flex:1; padding-top:4px; }
+.tl-title { font-size:13px; font-weight:500; margin-bottom:3px; }
+.tl-date { font-size:10px; color:var(--muted); }
+.mini-chart { display:flex; align-items:flex-end; gap:3px; height:40px; }
+.bar { flex:1; border-radius:2px 2px 0 0; min-width:8px; }
+/* RING CHART */
+.ring-wrap { position:relative; width:140px; height:140px; margin: 0 auto 12px; }
+.ring-svg { transform: rotate(-90deg); }
+.ring-bg { fill:none; stroke:var(--border); stroke-width:10; }
+.ring-fill { fill:none; stroke-width:10; stroke-linecap:round; stroke-dasharray:377; stroke-dashoffset:107; }
+.ring-label { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.ring-num { font-size:28px; font-weight:700; line-height:1; }
+.ring-text { font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:2px; }
+/* ARC CHART */
+.arc-wrap { text-align:center; padding: 16px 0 8px; }
+.arc-num { font-size:32px; font-weight:700; color:var(--accent); }
+.arc-label { font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+.reg-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; justify-content:center; }
+.reg-tag { font-size:10px; padding:3px 8px; border-radius:4px; border:1px solid var(--border); color:var(--muted); }
+.mt16 { margin-top: 16px; }
+.mt20 { margin-top: 20px; }
+.flex { display: flex; }
+.gap8 { gap: 8px; }
+.gap16 { gap: 16px; }
+.between { justify-content: space-between; }
+.center { align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-mark">AR</div>
+    <div>
+      <div class="logo-name">ARIA</div>
+      <div class="logo-sub">AI Risk & Compliance Intelligence</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="status-pill"><div class="status-dot"></div>LIVE MONITORING</div>
+    <div class="user-badge">Seema Sherief</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-item active" onclick="showPanel('dashboard')">01 · Dashboard</div>
+  <div class="nav-item" onclick="showPanel('assessment')">02 · AI Assessment</div>
+  <div class="nav-item" onclick="showPanel('interactions')">03 · Interaction Analyzer</div>
+  <div class="nav-item" onclick="showPanel('regulatory')">04 · Regulatory Map</div>
+  <div class="nav-item" onclick="showPanel('documentation')">05 · Doc Generator</div>
+  <div class="nav-item" onclick="showPanel('remediation')">06 · Remediation</div>
+</div>
+
+<!-- ===== PANEL 1: DASHBOARD ===== -->
+<div class="panel active" id="panel-dashboard">
+  <div class="page-title">Compliance Overview</div>
+  <div class="page-subtitle">E-commerce CS AI Systems · Live Risk Dashboard · Q2 2025</div>
+
+  <div class="grid-4">
+    <div class="card"><div class="card-label">Overall Risk Score</div><div class="card-value amber">72</div><div class="card-delta amber">▲ +4 pts this week</div></div>
+    <div class="card"><div class="card-label">EU AI Act Readiness</div><div class="card-value green">68%</div><div class="card-delta">▲ +8% from last audit</div></div>
+    <div class="card"><div class="card-label">Open Violations</div><div class="card-value red">14</div><div class="card-delta red">3 Critical · 6 High</div></div>
+    <div class="card"><div class="card-label">Interactions Scanned</div><div class="card-value">24,891</div><div class="card-delta">Last 30 days · 98.2% coverage</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- RISK BREAKDOWN WITH RING -->
+      <div class="card">
+        <div class="section-title">Risk Category Breakdown</div>
+        <div style="display:grid;grid-template-columns:160px 1fr;gap:24px;align-items:center;">
+          <div>
+            <div class="ring-wrap">
+              <svg class="ring-svg" width="140" height="140" viewBox="0 0 140 140">
+                <circle class="ring-bg" cx="70" cy="70" r="60"/>
+                <circle class="ring-fill" cx="70" cy="70" r="60" style="stroke:var(--warn);filter:drop-shadow(0 0 6px var(--warn))"/>
+              </svg>
+              <div class="ring-label">
+                <div class="ring-num amber">72</div>
+                <div class="ring-text">Risk Score</div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="risk-row"><div class="risk-name">Data Privacy</div><div class="risk-track"><div class="risk-fill" style="width:85%;background:var(--danger)"></div></div><div class="risk-val red">85</div></div>
+            <div class="risk-row"><div class="risk-name">AI Transparency</div><div class="risk-track"><div class="risk-fill" style="width:74%;background:var(--warn)"></div></div><div class="risk-val amber">74</div></div>
+            <div class="risk-row"><div class="risk-name">Human Oversight</div><div class="risk-track"><div class="risk-fill" style="width:68%;background:var(--warn)"></div></div><div class="risk-val amber">68</div></div>
+            <div class="risk-row"><div class="risk-name">Bias / Fairness</div><div class="risk-track"><div class="risk-fill" style="width:61%;background:var(--warn)"></div></div><div class="risk-val amber">61</div></div>
+            <div class="risk-row"><div class="risk-name">Accuracy</div><div class="risk-track"><div class="risk-fill" style="width:45%;background:var(--safe)"></div></div><div class="risk-val safe">45</div></div>
+            <div class="risk-row"><div class="risk-name">GDPR / CCPA</div><div class="risk-track"><div class="risk-fill" style="width:78%;background:var(--danger)"></div></div><div class="risk-val red">78</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ALERTS -->
+      <div class="card">
+        <div class="section-title">Live Compliance Alerts</div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(239,68,68,0.12);color:var(--danger)">⚠</div><div><div class="alert-title">AI agent not disclosing automated nature to customers</div><div class="alert-meta">EU AI Act Art. 52 · 847 sessions today · CS Bot v2.4</div></div><button class="alert-btn" onclick="showPanel('assessment')">Assess →</button></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(239,68,68,0.12);color:var(--danger)">🔒</div><div><div class="alert-title">PII data retained beyond policy limit in chat logs</div><div class="alert-meta">GDPR Art. 5(e) · CCPA §1798.100 · 12,400 records at risk</div></div><button class="alert-btn" onclick="showPanel('remediation')">Fix →</button></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(245,158,11,0.12);color:var(--warn)">⚖</div><div><div class="alert-title">Escalation rate disparity across customer segments</div><div class="alert-meta">Bias Flag · 23% gap English/Non-English routing · HIGH</div></div><button class="alert-btn" onclick="showPanel('interactions')">Review →</button></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(245,158,11,0.12);color:var(--warn)">📋</div><div><div class="alert-title">Missing human override documentation for AI decisions</div><div class="alert-meta">EU AI Act Art. 14 · Human Oversight requirement · MEDIUM</div></div><button class="alert-btn" onclick="showPanel('documentation')">Doc →</button></div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- EU AI ACT ARC -->
+      <div class="card">
+        <div class="section-title">EU AI Act Readiness</div>
+        <div class="arc-wrap">
+          <svg width="200" height="110" viewBox="0 0 200 110" style="display:block;margin:0 auto 8px;">
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--border)" stroke-width="14" stroke-linecap="round"/>
+            <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="80" style="filter:drop-shadow(0 0 8px var(--accent))"/>
+          </svg>
+          <div class="arc-num">68%</div>
+          <div class="arc-label">Compliant</div>
+          <div class="reg-tags">
+            <span class="reg-tag" style="color:var(--safe);border-color:var(--safe)">Art.13 ✓</span>
+            <span class="reg-tag" style="color:var(--warn);border-color:var(--warn)">Art.14 ⚠</span>
+            <span class="reg-tag" style="color:var(--danger);border-color:var(--danger)">Art.52 ✗</span>
+            <span class="reg-tag" style="color:var(--safe);border-color:var(--safe)">Art.9 ✓</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SYSTEMS -->
+      <div class="card">
+        <div class="section-title">CS AI Systems</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div><div class="flex between center"><span>CS Chatbot v2.4</span><span class="badge badge-critical">CRITICAL</span></div><div class="progress-track"><div class="progress-fill" style="width:32%;background:var(--danger)"></div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">32% compliant · 8 open issues</div></div>
+          <div><div class="flex between center"><span>Auto-Routing Engine</span><span class="badge badge-high">HIGH</span></div><div class="progress-track"><div class="progress-fill" style="width:61%;background:var(--warn)"></div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">61% compliant · 4 open issues</div></div>
+          <div><div class="flex between center"><span>Sentiment Classifier</span><span class="badge badge-medium">MEDIUM</span></div><div class="progress-track"><div class="progress-fill" style="width:79%"></div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">79% compliant · 2 open issues</div></div>
+          <div><div class="flex between center"><span>Return Fraud Detector</span><span class="badge badge-low">LOW</span></div><div class="progress-track"><div class="progress-fill" style="width:91%"></div></div><div style="font-size:10px;color:var(--muted);margin-top:4px;">91% compliant · 1 open issue</div></div>
+        </div>
+      </div>
+
+      <!-- TREND -->
+      <div class="card">
+        <div class="section-title">7-Day Violation Trend</div>
+        <div class="mini-chart">
+          <div class="bar" style="height:60%;background:rgba(239,68,68,0.3);border:1px solid var(--danger)"></div>
+          <div class="bar" style="height:70%;background:rgba(239,68,68,0.3);border:1px solid var(--danger)"></div>
+          <div class="bar" style="height:55%;background:rgba(245,158,11,0.3);border:1px solid var(--warn)"></div>
+          <div class="bar" style="height:80%;background:rgba(239,68,68,0.3);border:1px solid var(--danger)"></div>
+          <div class="bar" style="height:65%;background:rgba(245,158,11,0.3);border:1px solid var(--warn)"></div>
+          <div class="bar" style="height:50%;background:rgba(245,158,11,0.3);border:1px solid var(--warn)"></div>
+          <div class="bar" style="height:47%;background:rgba(0,212,170,0.2);border:1px solid var(--accent)"></div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);margin-top:8px;text-align:right;">↓ trending down — positive signal</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANEL 2: ASSESSMENT ===== -->
+<div class="panel" id="panel-assessment">
+  <div class="page-title">AI Compliance Assessment</div>
+  <div class="page-subtitle">Structured evaluation against EU AI Act, GDPR, CCPA & internal standards</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title">New Assessment</div>
+      <div class="form-group">
+        <label class="form-label">AI System</label>
+        <select class="form-select">
+          <option>CS Chatbot v2.4 - Customer-facing conversational AI</option>
+          <option>Auto-Routing Engine - Ticket classification</option>
+          <option>Sentiment Classifier - Real-time tone analysis</option>
+          <option>Return Fraud Detector - ML-based decisions</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Assessment Type</label>
+        <select class="form-select">
+          <option>Full Compliance Audit</option>
+          <option>EU AI Act Gap Analysis</option>
+          <option>GDPR / Privacy Impact Assessment</option>
+          <option>Bias & Fairness Evaluation</option>
+          <option>Human Oversight Review</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">System Description</label>
+        <textarea class="form-textarea" placeholder="Describe how this AI system is used, what decisions it makes, what data it processes..."></textarea>
+      </div>
+      <!-- FIX 1: Added Known Risk Areas field -->
+      <div class="form-group">
+        <label class="form-label">Known Risk Areas (optional)</label>
+        <input class="form-input" type="text" placeholder="e.g., PII handling, automated decisions, multilingual bias...">
+      </div>
+      <button class="btn btn-primary" onclick="runAssessment()" style="width:100%;justify-content:center;">▶ Run Assessment</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">EU AI Act Checklist — Art. 9–52</div>
+      <!-- FIX 2: All 8 checklist items -->
+      <div class="check-item"><div class="check-box checked" onclick="toggleCheck(this)">✓</div><div><div class="check-label">Transparency disclosure to end users</div><div class="check-desc">Art. 52(1) - Customers must know they are talking to AI</div></div></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><div><div class="check-label">Human oversight mechanism documented</div><div class="check-desc">Art. 14 - Human override procedures must exist and be logged</div></div></div>
+      <div class="check-item"><div class="check-box checked" onclick="toggleCheck(this)">✓</div><div><div class="check-label">Risk management system established</div><div class="check-desc">Art. 9 - Ongoing risk identification process in place</div></div></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><div><div class="check-label">Technical documentation maintained</div><div class="check-desc">Art. 11 - System design and performance metrics documented</div></div></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><div><div class="check-label">Logging and record-keeping active</div><div class="check-desc">Art. 12 - Automatic event logging for all AI decisions</div></div></div>
+      <div class="check-item"><div class="check-box checked" onclick="toggleCheck(this)">✓</div><div><div class="check-label">Data governance policy applied</div><div class="check-desc">Art. 10 - Training data meets quality and bias requirements</div></div></div>
+      <div class="check-item"><div class="check-box" onclick="toggleCheck(this)"></div><div><div class="check-label">Conformity assessment completed</div><div class="check-desc">Art. 43 - Third-party or internal conformity review documented</div></div></div>
+      <div class="check-item"><div class="check-box checked" onclick="toggleCheck(this)">✓</div><div><div class="check-label">Accuracy & robustness testing performed</div><div class="check-desc">Art. 15 - System tested against error rates and edge cases</div></div></div>
+    </div>
+  </div>
+
+  <div class="mt20">
+    <div class="scanning" id="scanningBar"><div style="display:flex;gap:4px"><div class="scan-dot"></div><div class="scan-dot"></div><div class="scan-dot"></div></div>Analyzing against EU AI Act, GDPR, CCPA...</div>
+    <div class="result-box" id="assessmentResult">
+      <div class="flex between center" style="margin-bottom:16px;">
+        <div><div style="font-size:20px;font-weight:700;margin-bottom:4px;">Assessment Report — CS Chatbot v2.4</div><div style="font-size:11px;color:var(--muted);">Full Compliance Audit</div></div>
+        <span class="badge badge-critical">CRITICAL RISK</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+        <div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:26px;font-weight:700;color:var(--danger)">3</div><div style="font-size:10px;color:var(--danger);text-transform:uppercase">Critical Gaps</div></div>
+        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:26px;font-weight:700;color:var(--warn)">5</div><div style="font-size:10px;color:var(--warn);text-transform:uppercase">High Gaps</div></div>
+        <div style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:8px;padding:14px;text-align:center;"><div style="font-size:26px;font-weight:700;color:var(--safe)">4</div><div style="font-size:10px;color:var(--safe);text-transform:uppercase">Compliant Items</div></div>
+      </div>
+      <table>
+        <thead><tr><th>Finding</th><th>Regulation</th><th>Impact</th><th>Severity</th></tr></thead>
+        <tbody>
+          <tr><td>AI identity not disclosed to customers</td><td style="font-size:11px;color:var(--muted)">EU AI Act Art. 52(1)</td><td style="font-size:11px">Fines up to €15M</td><td><span class="badge badge-critical">CRITICAL</span></td></tr>
+          <tr><td>No human escalation pathway for AI decisions</td><td style="font-size:11px;color:var(--muted)">EU AI Act Art. 14</td><td style="font-size:11px">Mandatory review required</td><td><span class="badge badge-critical">CRITICAL</span></td></tr>
+          <tr><td>Customer PII in unencrypted chat logs</td><td style="font-size:11px;color:var(--muted)">GDPR Art. 32</td><td style="font-size:11px">Data breach liability</td><td><span class="badge badge-critical">CRITICAL</span></td></tr>
+          <tr><td>English customers escalated 23% more often</td><td style="font-size:11px;color:var(--muted)">EU AI Act Art. 10</td><td style="font-size:11px">Discriminatory outcomes</td><td><span class="badge badge-high">HIGH</span></td></tr>
+          <tr><td>No automated logging of AI decisions</td><td style="font-size:11px;color:var(--muted)">EU AI Act Art. 12</td><td style="font-size:11px">Auditability gap</td><td><span class="badge badge-high">HIGH</span></td></tr>
+        </tbody>
+      </table>
+      <div class="flex gap8 mt16">
+        <button class="btn btn-primary" onclick="showPanel('documentation')">Generate Documentation →</button>
+        <button class="btn btn-outline" onclick="showPanel('remediation')">View Remediation Plan →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANEL 3: INTERACTIONS ===== -->
+<div class="panel" id="panel-interactions">
+  <div class="page-title">Interaction Compliance Analyzer</div>
+  <div class="page-subtitle">Real-time review of CS conversations for compliance flags</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title">Sample Interaction — Case #CS-48291</div>
+      <!-- FIX 3: All 6 messages -->
+      <div style="margin-bottom:14px;"><div class="chat-who">Customer · 10:14 AM</div><div class="chat-bubble chat-customer">Hi, I need help with my order. It hasn't arrived in 3 weeks.</div></div>
+      <div style="margin-bottom:14px;"><div class="chat-who">CS Agent (AI) · 10:14 AM</div><div class="chat-bubble chat-agent">Hi! I'm here to help. Can you provide your order number and email address?<span class="flag">⚠ No AI disclosure</span></div></div>
+      <div style="margin-bottom:14px;"><div class="chat-who">Customer · 10:15 AM</div><div class="chat-bubble chat-customer">It's #ORD-992847. My email is sarah.jones@email.com</div></div>
+      <div style="margin-bottom:14px;"><div class="chat-who">CS Agent (AI) · 10:15 AM</div><div class="chat-bubble chat-agent">Thank you Sarah! Your order was delayed due to a warehouse issue. I'm processing a full refund now.<span class="flag">⚠ PII collected</span><span class="flag" style="background:rgba(245,158,11,0.12);border-color:rgba(245,158,11,0.3);color:var(--warn)">⚠ Auto-decision</span></div></div>
+      <div style="margin-bottom:14px;"><div class="chat-who">Customer · 10:16 AM</div><div class="chat-bubble chat-customer">Actually I'd prefer a replacement, not a refund. Can you do that?</div></div>
+      <div><div class="chat-who">CS Agent (AI) · 10:16 AM</div><div class="chat-bubble chat-agent">I'm sorry, refunds are the only option for orders over 14 days.<span class="flag">⚠ No escalation offered</span></div></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="card">
+        <div class="section-title">Compliance Flags</div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(239,68,68,0.12);color:var(--danger)">⚠</div><div><div class="alert-title">No AI identity disclosure at session start</div><div class="alert-meta">EU AI Act Art. 52(1) · CRITICAL</div></div><span class="badge badge-critical">CRITICAL</span></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(239,68,68,0.12);color:var(--danger)">🔒</div><div><div class="alert-title">Email collected without explicit consent</div><div class="alert-meta">GDPR Art. 6 · CCPA §1798.100</div></div><span class="badge badge-critical">CRITICAL</span></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(245,158,11,0.12);color:var(--warn)">🤖</div><div><div class="alert-title">Automated financial decision without human review</div><div class="alert-meta">EU AI Act Art. 14</div></div><span class="badge badge-high">HIGH</span></div>
+        <div class="alert-item"><div class="alert-icon" style="background:rgba(245,158,11,0.12);color:var(--warn)">👤</div><div><div class="alert-title">Customer denied human agent option</div><div class="alert-meta">Internal Policy P-CS-07</div></div><span class="badge badge-high">HIGH</span></div>
+      </div>
+
+      <!-- RISK SCORE WITH 1 COMPLIANT -->
+      <div class="card" style="text-align:center;padding:24px;">
+        <div style="font-size:52px;font-weight:700;color:var(--danger);">88</div>
+        <div style="font-size:12px;color:var(--danger);margin-bottom:12px;">/ 100 · HIGH RISK</div>
+        <div class="flex gap8" style="justify-content:center;margin-bottom:16px;">
+          <span class="badge badge-critical">2 Critical</span>
+          <span class="badge badge-high">2 High</span>
+          <!-- FIX 3b: 1 Compliant badge -->
+          <span class="badge badge-low">1 Compliant</span>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="alert('Escalation created for agent review.')">Escalate for Review</button>
+      </div>
+
+      <!-- FIX 3c: Bulk Scan Summary -->
+      <div class="card">
+        <div class="section-title">Bulk Scan Summary · Last 7 Days</div>
+        <table>
+          <thead><tr><th>Flag Type</th><th>Count</th><th>Trend</th></tr></thead>
+          <tbody>
+            <tr><td>No AI disclosure</td><td style="color:var(--danger);font-size:12px;">847</td><td style="font-size:11px;color:var(--danger);">▲ +12%</td></tr>
+            <tr><td>PII without consent</td><td style="color:var(--danger);font-size:12px;">392</td><td style="font-size:11px;color:var(--warn);">▲ +4%</td></tr>
+            <tr><td>Auto-decision no review</td><td style="color:var(--warn);font-size:12px;">219</td><td style="font-size:11px;color:var(--safe);">▼ -8%</td></tr>
+            <tr><td>No escalation offered</td><td style="color:var(--warn);font-size:12px;">541</td><td style="font-size:11px;color:var(--warn);">▲ +2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANEL 4: REGULATORY ===== -->
+<div class="panel" id="panel-regulatory">
+  <div class="page-title">Regulatory Compliance Map</div>
+  <div class="page-subtitle">EU AI Act · GDPR · CCPA · Cross-reference matrix</div>
+
+  <div class="grid-3" style="margin-bottom:20px;">
+    <div class="card" style="border-color:rgba(0,212,170,0.3)">
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;">EU AI Act</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Applies to customer-facing AI. Transparency obligations mandatory regardless of risk tier.</div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--danger);background:rgba(239,68,68,0.12);color:var(--danger)">!</div><div class="tl-content"><div class="tl-title">Art. 52 - Transparency</div><div class="tl-date">AI must identify itself · FAILING</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--danger);background:rgba(239,68,68,0.12);color:var(--danger)">!</div><div class="tl-content"><div class="tl-title">Art. 14 - Human Oversight</div><div class="tl-date">Override paths required · FAILING</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--warn);background:rgba(245,158,11,0.12);color:var(--warn)">~</div><div class="tl-content"><div class="tl-title">Art. 12 - Logging</div><div class="tl-date">Partial logging only · IN PROGRESS</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--safe);background:rgba(16,185,129,0.1);color:var(--safe)">✓</div><div class="tl-content"><div class="tl-title">Art. 9 - Risk Management</div><div class="tl-date">Framework established · PASSING</div></div></div>
+    </div>
+    <div class="card" style="border-color:rgba(245,158,11,0.3)">
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;">GDPR</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Applies to all EU customer PII. Chat logs and email addresses are personal data under Art. 4.</div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--danger);background:rgba(239,68,68,0.12);color:var(--danger)">!</div><div class="tl-content"><div class="tl-title">Art. 6 - Lawful Basis</div><div class="tl-date">PII without clear basis · FAILING</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--danger);background:rgba(239,68,68,0.12);color:var(--danger)">!</div><div class="tl-content"><div class="tl-title">Art. 32 - Security</div><div class="tl-date">Unencrypted logs · FAILING</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--warn);background:rgba(245,158,11,0.12);color:var(--warn)">~</div><div class="tl-content"><div class="tl-title">Art. 5(e) - Retention</div><div class="tl-date">Logs exceed 90-day policy · REVIEW</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--safe);background:rgba(16,185,129,0.1);color:var(--safe)">✓</div><div class="tl-content"><div class="tl-title">Art. 30 - Records</div><div class="tl-date">Processing records maintained · PASSING</div></div></div>
+    </div>
+    <div class="card" style="border-color:rgba(59,130,246,0.3)">
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px;">CCPA / CPRA</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:16px;">Applies to California residents. Opt-out rights and deletion rights must be honoured.</div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--warn);background:rgba(245,158,11,0.12);color:var(--warn)">~</div><div class="tl-content"><div class="tl-title">§1798.100 - Right to Know</div><div class="tl-date">Partial notice only · IN PROGRESS</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--safe);background:rgba(16,185,129,0.1);color:var(--safe)">✓</div><div class="tl-content"><div class="tl-title">§1798.105 - Deletion Right</div><div class="tl-date">Deletion portal live · PASSING</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--warn);background:rgba(245,158,11,0.12);color:var(--warn)">~</div><div class="tl-content"><div class="tl-title">§1798.120 - Opt-Out</div><div class="tl-date">Not surfaced in chat · REVIEW</div></div></div>
+      <div class="tl-item"><div class="tl-dot" style="border-color:var(--safe);background:rgba(16,185,129,0.1);color:var(--safe)">✓</div><div class="tl-content"><div class="tl-title">§1798.150 - Security</div><div class="tl-date">Breach procedures documented · PASSING</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Cross-Regulation Impact Matrix</div>
+    <table>
+      <!-- FIX 4: Internal Policy column added -->
+      <thead><tr><th>CS AI Risk Area</th><th>EU AI Act</th><th>GDPR</th><th>CCPA</th><th>Internal Policy</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>AI identity disclosure</td><td><span class="badge badge-critical">Art. 52</span></td><td style="color:var(--muted);font-size:11px">—</td><td style="color:var(--muted);font-size:11px">—</td><td style="font-size:11px;color:var(--muted)">P-CS-01</td><td><span class="badge badge-critical">FAILING</span></td></tr>
+        <tr><td>PII collection in chat</td><td><span class="badge badge-info">Art. 10</span></td><td><span class="badge badge-critical">Art. 6, 32</span></td><td><span class="badge badge-medium">§1798.100</span></td><td style="font-size:11px;color:var(--muted)">P-PRIV-03</td><td><span class="badge badge-critical">FAILING</span></td></tr>
+        <tr><td>Automated decisions</td><td><span class="badge badge-critical">Art. 14</span></td><td><span class="badge badge-high">Art. 22</span></td><td style="color:var(--muted);font-size:11px">—</td><td style="font-size:11px;color:var(--muted)">P-CS-07</td><td><span class="badge badge-high">PARTIAL</span></td></tr>
+        <tr><td>Sentiment / profiling</td><td><span class="badge badge-info">Art. 10</span></td><td><span class="badge badge-medium">Art. 22</span></td><td><span class="badge badge-medium">§1798.140</span></td><td style="font-size:11px;color:var(--muted)">P-PRIV-05</td><td><span class="badge badge-medium">REVIEW</span></td></tr>
+        <tr><td>Data retention in logs</td><td style="color:var(--muted);font-size:11px">—</td><td><span class="badge badge-high">Art. 5(e)</span></td><td><span class="badge badge-medium">§1798.105</span></td><td style="font-size:11px;color:var(--muted)">P-DATA-02</td><td><span class="badge badge-high">NON-COMPLIANT</span></td></tr>
+        <tr><td>Bias in routing logic</td><td><span class="badge badge-high">Art. 10</span></td><td style="color:var(--muted);font-size:11px">—</td><td style="color:var(--muted);font-size:11px">—</td><td style="font-size:11px;color:var(--muted)">P-CS-12</td><td><span class="badge badge-high">INVESTIGATING</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== PANEL 5: DOCUMENTATION ===== -->
+<div class="panel" id="panel-documentation">
+  <div class="page-title">Regulatory Documentation Generator</div>
+  <div class="page-subtitle">Auto-generate compliant documentation packages for CS AI systems</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title">Generate Document</div>
+      <div class="form-group">
+        <label class="form-label">Document Type</label>
+        <!-- FIX 5: Added Incident Response Playbook and Conformity Assessment -->
+        <select class="form-select" id="docType">
+          <option>EU AI Act — Technical Documentation (Art. 11)</option>
+          <option>GDPR Data Protection Impact Assessment (DPIA)</option>
+          <option>AI Transparency Notice (Customer-Facing)</option>
+          <option>Human Oversight Procedure Manual</option>
+          <option>Bias Audit Report</option>
+          <option>Incident Response Playbook</option>
+          <option>Conformity Self-Assessment (EU AI Act Art. 43)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">AI System</label>
+        <select class="form-select">
+          <option>CS Chatbot v2.4</option>
+          <option>Auto-Routing Engine</option>
+          <option>Sentiment Classifier</option>
+          <option>Return Fraud Detector</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Scope & Context Notes</label>
+        <textarea class="form-textarea" placeholder="Add context about current system state or areas to focus on..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="generateDoc()" style="width:100%;justify-content:center;">⚡ Generate Document</button>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Document Library</div>
+      <table>
+        <thead><tr><th>Document</th><th>Status</th><th>Updated</th></tr></thead>
+        <tbody>
+          <tr><td><div style="font-size:13px;">AI Transparency Notice v2</div><div style="font-size:11px;color:var(--muted)">EU AI Act Art. 52</div></td><td><span class="badge badge-medium">DRAFT</span></td><td style="font-size:11px;color:var(--muted)">Mar 2025</td></tr>
+          <tr><td><div style="font-size:13px;">DPIA - CS Chatbot v2.4</div><div style="font-size:11px;color:var(--muted)">GDPR Art. 35</div></td><td><span class="badge badge-low">APPROVED</span></td><td style="font-size:11px;color:var(--muted)">Jan 2025</td></tr>
+          <tr><td><div style="font-size:13px;">Human Oversight Manual v1</div><div style="font-size:11px;color:var(--muted)">EU AI Act Art. 14</div></td><td><span class="badge badge-critical">MISSING</span></td><td style="font-size:11px;color:var(--muted)">—</td></tr>
+          <tr><td><div style="font-size:13px;">Bias Audit Report Q1-2025</div><div style="font-size:11px;color:var(--muted)">Art. 10 · Routing fairness</div></td><td><span class="badge badge-medium">IN REVIEW</span></td><td style="font-size:11px;color:var(--muted)">Feb 2025</td></tr>
+          <tr><td><div style="font-size:13px;">Incident Response Playbook v3</div><div style="font-size:11px;color:var(--muted)">GDPR Art. 33 · 72-hour breach notice</div></td><td><span class="badge badge-low">APPROVED</span></td><td style="font-size:11px;color:var(--muted)">Dec 2024</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="mt20">
+    <div class="scanning" id="docScanning"><div style="display:flex;gap:4px"><div class="scan-dot"></div><div class="scan-dot"></div><div class="scan-dot"></div></div>Generating regulatory document...</div>
+    <div class="result-box" id="docResult">
+      <div class="flex between center" style="margin-bottom:16px;">
+        <div><div style="font-size:20px;font-weight:700;margin-bottom:4px;" id="docTitle">EU AI Act — Technical Documentation</div><div style="font-size:11px;color:var(--muted)">Auto-generated · CS Chatbot v2.4 · Requires human review before submission</div></div>
+        <button class="btn btn-outline" onclick="alert('Exported as PDF.')">Export PDF</button>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;line-height:1.8;">
+        <p style="margin-bottom:14px;"><strong>1. System Overview</strong><br>CS Chatbot v2.4 is a conversational AI deployed in e-commerce customer service. It processes inbound enquiries, automates common requests, and routes complex cases to human agents 24/7 across web, mobile, and messaging channels.</p>
+        <p style="margin-bottom:14px;"><strong>2. Risk Classification</strong><br>Under EU AI Act Annex III: classified as <strong style="color:var(--warn)">Limited Risk</strong> under Article 6(2). Transparency obligations under Article 52 apply mandatorily. Reclassification review recommended due to automated financial decisions.</p>
+        <p style="margin-bottom:14px;"><strong>3. Transparency Gap (Art. 52)</strong><br><span style="color:var(--danger);font-size:12px;">⚠ GAP IDENTIFIED:</span> Current deployment does not include mandatory AI disclosure. Recommended fix: insert disclosure within first response. Approved text: <em>"You are being assisted by an AI system. A human agent is available on request."</em></p>
+        <p><strong>4. Human Oversight (Art. 14)</strong><br>Human escalation pathway exists via /agent command. Written procedure specifying conditions for mandatory human review is pending — this is a critical gap requiring immediate remediation.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PANEL 6: REMEDIATION ===== -->
+<div class="panel" id="panel-remediation">
+  <div class="page-title">Remediation & Action Plan</div>
+  <div class="page-subtitle">Prioritised compliance fixes with ownership, timelines, and tracking</div>
+
+  <div class="grid-4" style="margin-bottom:20px;">
+    <div class="card" style="border-color:var(--danger)"><div class="card-label" style="color:var(--danger)">Critical — Act Now</div><div class="card-value red">3</div><div class="card-delta">Resolve within 30 days</div></div>
+    <div class="card" style="border-color:var(--warn)"><div class="card-label" style="color:var(--warn)">High Priority</div><div class="card-value amber">6</div><div class="card-delta">Resolve within 90 days</div></div>
+    <div class="card"><div class="card-label">Medium Priority</div><div class="card-value">4</div><div class="card-delta">Resolve within 180 days</div></div>
+    <div class="card" style="border-color:var(--safe)"><div class="card-label" style="color:var(--safe)">Resolved This Month</div><div class="card-value safe">7</div><div class="card-delta">▲ Up from 3 last month</div></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">Active Remediation Items</div>
+    <table>
+      <thead><tr><th>ID</th><th>Issue</th><th>Regulation</th><th>Owner</th><th>Deadline</th><th>Progress</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-001</td><td><div style="font-weight:500">Add AI disclosure at chat start</div><div style="font-size:11px;color:var(--muted)">Insert mandatory AI identity message</div></td><td><span class="badge badge-critical" style="font-size:9px">Art.52</span></td><td style="font-size:11px">Tech Lead</td><td style="font-size:11px;color:var(--danger)">Apr 15</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">65%</div><div class="progress-track"><div class="progress-fill" style="width:65%;background:var(--warn)"></div></div></td><td><span class="badge badge-medium">IN PROGRESS</span></td></tr>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-002</td><td><div style="font-weight:500">Encrypt PII in chat logs</div><div style="font-size:11px;color:var(--muted)">Apply AES-256 to stored chat data</div></td><td><span class="badge badge-critical" style="font-size:9px">GDPR Art.32</span></td><td style="font-size:11px">Data Eng</td><td style="font-size:11px;color:var(--danger)">Apr 22</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">20%</div><div class="progress-track"><div class="progress-fill" style="width:20%;background:var(--danger)"></div></div></td><td><span class="badge badge-high">BEHIND</span></td></tr>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-003</td><td><div style="font-weight:500">Document human override procedures</div><div style="font-size:11px;color:var(--muted)">Write and publish Art. 14 Oversight Manual</div></td><td><span class="badge badge-critical" style="font-size:9px">Art.14</span></td><td style="font-size:11px">AI Ops Mgr</td><td style="font-size:11px;color:var(--warn)">May 1</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">40%</div><div class="progress-track"><div class="progress-fill" style="width:40%;background:var(--warn)"></div></div></td><td><span class="badge badge-medium">IN PROGRESS</span></td></tr>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-004</td><td><div style="font-weight:500">Implement 90-day log retention</div><div style="font-size:11px;color:var(--muted)">Auto-purge policy for logs exceeding limit</div></td><td><span class="badge badge-high" style="font-size:9px">GDPR Art.5</span></td><td style="font-size:11px">Data Eng</td><td style="font-size:11px">May 15</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">80%</div><div class="progress-track"><div class="progress-fill" style="width:80%"></div></div></td><td><span class="badge badge-low">NEAR DONE</span></td></tr>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-005</td><td><div style="font-weight:500">Fix multilingual routing bias</div><div style="font-size:11px;color:var(--muted)">Retrain model on balanced dataset</div></td><td><span class="badge badge-high" style="font-size:9px">Art.10</span></td><td style="font-size:11px">ML Team</td><td style="font-size:11px">Jun 1</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">10%</div><div class="progress-track"><div class="progress-fill" style="width:10%;background:var(--danger)"></div></div></td><td><span class="badge badge-high">JUST STARTED</span></td></tr>
+        <tr><td style="font-size:11px;color:var(--muted)">REM-006</td><td><div style="font-weight:500">Enable automated event logging</div><div style="font-size:11px;color:var(--muted)">Art. 12 compliant logging for all AI outcomes</div></td><td><span class="badge badge-high" style="font-size:9px">Art.12</span></td><td style="font-size:11px">Tech Lead</td><td style="font-size:11px">Jun 15</td><td style="min-width:100px"><div style="font-size:10px;margin-bottom:4px">55%</div><div class="progress-track"><div class="progress-fill" style="width:55%;background:var(--warn)"></div></div></td><td><span class="badge badge-medium">IN PROGRESS</span></td></tr>
+      </tbody>
+    </table>
+    <div class="flex gap8 mt16">
+      <button class="btn btn-primary" onclick="alert('Report exported.')">Export Full Report</button>
+      <button class="btn btn-outline" onclick="alert('Stakeholder email sent.')">Email Stakeholders</button>
+      <button class="btn btn-outline" onclick="showPanel('documentation')">Generate Remediation Docs →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPanel(id) {
+  var panels = document.querySelectorAll('.panel');
+  for (var i = 0; i < panels.length; i++) {
+    panels[i].classList.remove('active');
+  }
+  var navItems = document.querySelectorAll('.nav-item');
+  for (var i = 0; i < navItems.length; i++) {
+    navItems[i].classList.remove('active');
+  }
+  var target = document.getElementById('panel-' + id);
+  if (target) target.classList.add('active');
+  var map = { dashboard:0, assessment:1, interactions:2, regulatory:3, documentation:4, remediation:5 };
+  if (map[id] !== undefined) navItems[map[id]].classList.add('active');
+  window.scrollTo(0, 0);
+}
+function runAssessment() {
+  var bar = document.getElementById('scanningBar');
+  var result = document.getElementById('assessmentResult');
+  result.classList.remove('show');
+  bar.classList.add('active');
+  setTimeout(function() {
+    bar.classList.remove('active');
+    result.classList.add('show');
+  }, 2800);
+}
+function generateDoc() {
+  var bar = document.getElementById('docScanning');
+  var result = document.getElementById('docResult');
+  result.classList.remove('show');
+  bar.classList.add('active');
+  setTimeout(function() {
+    bar.classList.remove('active');
+    result.classList.add('show');
+  }, 2200);
+}
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.innerHTML = el.classList.contains('checked') ? '✓' : '';
+}
+</script>
+</body>
+</html>
