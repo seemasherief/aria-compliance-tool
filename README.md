@@ -188,7 +188,7 @@ A continuous risk management process must exist before and after deployment. Not
 
 A detailed written record of system design, training data, testing, performance metrics and known limitations. Must be maintained and updated when the system changes.
 
-**Art. 12 — Logging and Record-Keeping**
+**Art. 12 - Logging and Record-Keeping**
 
 The AI must automatically record its own decisions with timestamps. If a regulator asks why the AI refused a refund on a specific date, the log must answer that question.
 
