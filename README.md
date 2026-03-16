@@ -389,20 +389,19 @@ Single-file HTML application
 
 In production this tool would connect to live systems:
 
-```
-Frontend (React / Next.js)
-         ↓
-   API Layer (Node.js)
-    ↓         ↓         ↓
-LLM API   CS Platform  Compliance
-(Claude)  APIs         Rules Engine
-    ↓
-Database ← Findings, documents, remediation state
-    ↓
-Immutable Audit Log ← Signed compliance events
-```
+| Layer | Technology | Purpose |
+|---|---|---|
+| Frontend | React / Next.js | User interface |
+| API Layer | Node.js / FastAPI | Business logic and routing |
+| AI Engine | Claude LLM API | Real-time compliance analysis |
+| Data Source | CS Platform APIs | Live chat interaction feed |
+| Rules Engine | Custom compliance library | Regulatory rule matching |
+| Database | PostgreSQL | Findings, documents, remediation state |
+| Audit Log | Immutable signed event store | Regulatory defensibility |
 
-The prototype simulates all AI-powered workflows using timed reveals. In production these would be real LLM API calls returning live compliance analysis.
+> The prototype simulates all AI-powered workflows using timed reveals.
+> In production these would be real LLM API calls returning live compliance analysis.
+> The UI pattern remains identical. Only the data source changes.
 
 ---
 
