@@ -3,7 +3,7 @@
 
 A proactive compliance risk mitigation tool for e-commerce Customer Service AI systems.
 
-🔗 **[View Live Tool](https://seemasherief.github.io/aria-compliance-tool)**
+ **[View Live Tool](https://seemasherief.github.io/aria-compliance-tool)**
 
 ---
 
